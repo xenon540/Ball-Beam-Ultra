@@ -1,6 +1,7 @@
 #include <Servo.h>
 #include "pins.h"
 #include "lcd_and_button.h"
+#include "encoder_change_value.h"
 
 Servo myServo;
 HMI myHMI;
@@ -9,8 +10,8 @@ float val, distance;
 int flag = 4, period = 50, x5, x4, x3, x2, x1;
 float elapsedTime, time, timePrev;        //Variables for time control
 float distance_previous_error, distance_error, pre_PID;
-float input;
 
+float sys_var[4] = {2.0, 0.2, 80.0, 22.0}; // Kp, Ki, Kd, Set_p 
 float kp = 2.0; //Mine was 8 2- for micro; 5 for normal
 float ki = 0.2; //Mine was 0.2
 float kd = 80.0; //Mine was 3100
@@ -22,22 +23,26 @@ void measure();
 float get_dist();
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(A1, INPUT);
-//   pinMode(Button, INPUT_PULLUP);
-  pinMode(LED_GREEN_PIN, OUTPUT);
-  pinMode(LED_RED_PIN, OUTPUT);
-  myServo.attach(SERVO_PIN);
-  Serial.begin(9600);
-  attachInterrupt(0, measure, FALLING);
-  time = millis();
-  greeting();
-  myHMI.HMIinit(&kp, &ki, &kd, &distance_setpoint);
+    // put your setup code here, to run once:
+    pinMode(SENSOR_PIN, INPUT);
+    pinMode(LED_GREEN_PIN, OUTPUT);
+    pinMode(LED_RED_PIN, OUTPUT);
+    pinMode(ENCODER_PIN_A, INPUT);
+    pinMode(ENCODER_PIN_B, INPUT);
+    pinMode(MENU_BUTTON_PIN, INPUT_PULLUP);
+    pinMode(ENCODER_PIN_SWITCH, INPUT); 
+    myServo.attach(SERVO_PIN);
+    Serial.begin(9600);
+    attachInterrupt(0, encoderChange, FALLING);
+    greeting();
+    myHMI.HMIinit();
+    time = millis();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  myHMI.run();
+    myHMI.run();
+    Serial.println(sys_var[0]);
 //   if (Serial.available() > 0) {
 //     flag = Serial.parseInt();
 //     Serial.flush();
@@ -79,8 +84,8 @@ void loop() {
 //   }
 //   /* PID Ball beam mode */
 //   if (flag == 3) {
-    Serial.println("Ball beam micro mode!");
-    if (millis() > time + period) {
+    // Serial.println("Ball beam micro mode!");
+  /*  if (millis() > time + period) {
         time = millis();
         x4 = x3;
         x3 = x2;
@@ -119,7 +124,7 @@ void loop() {
         myServo.writeMicroseconds(PID_total);
         distance_previous_error = distance_error;
         pre_PID = PID_total;
-    }
+    } */
     // }
 //   }
 //   if (flag == 4) {

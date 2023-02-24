@@ -10,9 +10,6 @@ int enc_btn_state;
 int enc_btn_state_prev = 1, btn_state_prev = 1;
 int menu_select = 0, inc_select = 0;
 
-float increment[4] = {0.01, 0.1, 1, 10};
-
-int currentStateA, lastStateA; 
 
 byte Arrow[8] = {
 0b00000,
@@ -36,18 +33,11 @@ byte TwoWayArrow[8] = {
 };
 
 HMI::HMI() {
-    this->enc_pin_a = ENCODER_PIN_A;
-    this->enc_pin_b = ENCODER_PIN_B;
     this->enc_pin_sw = ENCODER_PIN_SWITCH;
     this->button_pin = MENU_BUTTON_PIN;
 }
 
-void HMI::HMIinit(float *kp, float *ki, float *kd, float *distance_setpoint) {
-    this->p[0] = kp;
-    this->p[1] = ki;
-    this->p[2] = kd;
-    this->p[3] = distance_setpoint;
-
+void HMI::HMIinit() {
     lcd.init();
     lcd.backlight();
     lcd.createChar(0, Arrow);
@@ -66,13 +56,16 @@ void HMI::HMIinit(float *kp, float *ki, float *kd, float *distance_setpoint) {
     lcd.write(byte(0));
     lcd.setCursor(12, 1);
     lcd.print(increment[0]);
-    pinMode(enc_pin_a, INPUT);
-    pinMode(enc_pin_b, INPUT);
-    pinMode(button_pin, INPUT_PULLUP);
-    pinMode(enc_pin_sw, INPUT); 
 }
 
 void HMI::run() {   
+    if (check == 1) {
+        check = 0;
+        lcd.setCursor(0, 1);
+        lcd.print("          ");
+        lcd.setCursor(0, 1);
+        lcd.print(sys_var[menu_select]);
+    } //* Only update if the ISR is called, make the program less slow
     enc_btn_state = digitalRead(enc_pin_sw); 
     if (enc_btn_state == 0 && enc_btn_state_prev == 1)
     {
@@ -104,11 +97,12 @@ void HMI::run() {
         lcd.setCursor(0, 1);
         lcd.print("          ");
         lcd.setCursor(0, 1);
-        lcd.print(*p[menu_select]);
+        lcd.print(sys_var[menu_select]);
     }
     btn_state_prev = btn_state;
 
-    encoderState(p[menu_select], increment[inc_select]);
+    // encoderState(p[menu_select], increment[inc_select]);
+ 
 }
 
 void HMI::updateParameters(int gtmenu, int gttang, float inc) 
@@ -129,28 +123,5 @@ void HMI::updateParameters(int gtmenu, int gttang, float inc)
     lcd.print("    ");
     lcd.setCursor(12, 1);
     lcd.print(inc);
-}
 
-void HMI::encoderState(float *p, float gttang)
-{
-    currentStateA = digitalRead(enc_pin_a);
-    if (currentStateA != lastStateA  && currentStateA == 1)
-    {
-      if (digitalRead(enc_pin_b) != currentStateA) 
-      {
-        *p -= gttang;
-      } 
-      else 
-      {
-        *p += gttang;
-      }
-      if (*p <0) {
-        *p = 0; 
-      }
-      lcd.setCursor(0, 1);
-      lcd.print("          ");
-      lcd.setCursor(0, 1);
-      lcd.print(*p);
-    }
-    lastStateA = currentStateA;
 }

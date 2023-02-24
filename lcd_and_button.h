@@ -3,19 +3,18 @@
 
 #include <Arduino.h>
 
+extern float sys_var[];
+extern float increment[];
+extern int check;
+
 class HMI {
 private:
-    byte enc_pin_a;
-    byte enc_pin_b;
     byte enc_pin_sw; 
     byte button_pin;
-    float *p[4];
-
 public:
     HMI();
-    void HMIinit(float *kp, float *ki, float *kd, float *distance_setpoint);
+    void HMIinit();
     void run();
     void updateParameters(int gtmenu, int gttang, float inc);
-    void encoderState(float *p, float gttang);
 };
 #endif
