@@ -58,14 +58,14 @@ void HMI::HMIinit() {
     lcd.print(increment[0]);
 }
 
-void HMI::run() {   
+int HMI::run() {   
     if (check == 1) {
         check = 0;
         lcd.setCursor(0, 1);
         lcd.print("          ");
         lcd.setCursor(0, 1);
         lcd.print(sys_var[menu_select]);
-    } //* Only update if the ISR is called, make the program less slow
+    } //* Only update if the ISR is called, make the program run less slowly
     enc_btn_state = digitalRead(enc_pin_sw); 
     if (enc_btn_state == 0 && enc_btn_state_prev == 1)
     {
@@ -101,8 +101,13 @@ void HMI::run() {
     }
     btn_state_prev = btn_state;
 
-    // encoderState(p[menu_select], increment[inc_select]);
- 
+    /* Check if two button is both pressed, used to choose other mode,.. !? */ 
+    if (btn_state == 0 && enc_btn_state ==0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 void HMI::updateParameters(int gtmenu, int gttang, float inc) 

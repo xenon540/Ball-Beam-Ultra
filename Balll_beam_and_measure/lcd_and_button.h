@@ -14,7 +14,7 @@ private:
 public:
     HMI();
     void HMIinit();
-    void run();
+    int run();
     void updateParameters(int gtmenu, int gttang, float inc);
 };
 #endif

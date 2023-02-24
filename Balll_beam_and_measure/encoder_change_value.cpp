@@ -7,12 +7,12 @@ int check = 0;
 void encoderChange() {
     if (digitalRead(ENCODER_PIN_B) != 0) {
         sys_var[menu_select] += increment[inc_select];
-        if (sys_var[menu_select] <0) {
-            sys_var[menu_select] = 0; 
-        }
     } 
     else {
         sys_var[menu_select] -= increment[inc_select];
+        if (sys_var[menu_select] <0) {
+            sys_var[menu_select] = 0; 
+        }
     }
     check = 1;
 }
