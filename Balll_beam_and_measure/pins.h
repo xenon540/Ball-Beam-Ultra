@@ -17,10 +17,10 @@
     #define ENCODER_PIN_B 3
 #endif
 #ifndef ENCODER_PIN_SWITCH
-    #define ENCODER_PIN_SWITCH 7
+    #define ENCODER_PIN_SWITCH 5
 #endif
 #ifndef MENU_BUTTON_PIN
-    #define MENU_BUTTON_PIN 5
+    #define MENU_BUTTON_PIN 7
 #endif
 #ifndef SERVO_PIN
     #define SERVO_PIN 9

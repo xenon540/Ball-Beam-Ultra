@@ -13,8 +13,6 @@ float distance;
 int pid_period = 50;
 float elapsedTime, time, timePrev;        //Variables for time control
 
-// float sys_var[4] = {2.0, 0.2, 80.0, 22.0}; // Kp, Ki, Kd, Set_p 
-
 void greeting();
 
 void setup() {
@@ -46,6 +44,7 @@ void loop() {
     }
 
     distance = get_distance_cm();
+    Serial.print(distance);
     myServo.write(servoAngle(distance));
 
 }

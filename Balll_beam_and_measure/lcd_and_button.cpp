@@ -43,9 +43,9 @@ void HMI::HMIinit() {
     lcd.createChar(0, Arrow);
     lcd.createChar(1, TwoWayArrow);
     lcd.setCursor(1,0);
-    lcd.print("Ki");
-    lcd.setCursor(5,0);
     lcd.print("Kp");
+    lcd.setCursor(5,0);
+    lcd.print("Ki");
     lcd.setCursor(9,0);
     lcd.print("Kd");
     lcd.setCursor(13,0);
