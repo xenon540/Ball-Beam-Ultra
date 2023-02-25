@@ -102,7 +102,7 @@ int HMI::run() {
     btn_state_prev = btn_state;
 
     /* Check if two button is both pressed, used to choose other mode,.. !? */ 
-    if (btn_state == 0 && enc_btn_state ==0) {
+    if (btn_state == 0 && enc_btn_state == 0) {
         return 1;
     }
     else {

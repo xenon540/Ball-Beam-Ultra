@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+// extern Serial;
 extern int PID_period;
 
 float servoAngle(float current_point);

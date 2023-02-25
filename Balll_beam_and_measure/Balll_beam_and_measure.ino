@@ -3,11 +3,12 @@
 #include "lcd_and_button.h"
 #include "encoder_change_value.h"
 #include "get_distance_from_sensor.h"
+#include "PID_controller.h"
 
 Servo myServo;
 HMI myHMI;
 
-int measure_mode;
+int both_click, flag;
 float distance;
 int pid_period = 50;
 float elapsedTime, time, timePrev;        //Variables for time control
@@ -35,14 +36,18 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-    measure_mode = myHMI.run();
-    if (measure_mode) {
+    both_click = myHMI.run();
+    if (both_click == 1) {
+        flag = !(flag); //Toggle the flag 
+    }
+    if (flag == 1) {
+        // myServo.write(middle_angle???)
         // measuring();
     }
-    else {
-        ////
-    }
-    Serial.println(sys_var[0]);
+
+    distance = get_distance_cm();
+    myServo.write(servoAngle(distance));
+
 }
 
 void greeting() {
