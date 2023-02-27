@@ -7,6 +7,7 @@
 extern float sys_var[4]; 
 extern int menu_select, inc_select;
 extern LiquidCrystal_I2C lcd;
+extern int operation_mode;
 
 void encoderChange();
 

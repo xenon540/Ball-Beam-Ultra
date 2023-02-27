@@ -5,8 +5,8 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-int btn_state;
-int enc_btn_state;
+int btn_state, enc_btn_state;
+int mode;
 int enc_btn_state_prev = 1, btn_state_prev = 1;
 int menu_select = 0, inc_select = 0;
 
@@ -77,7 +77,7 @@ int HMI::run() {
             {
                 inc_select++;  
             } 
-        updateParameters(menu_select, btn_state, increment[inc_select]); 
+        updateParameters(menu_select, increment[inc_select]); 
     }
     enc_btn_state_prev = enc_btn_state;
 
@@ -93,7 +93,7 @@ int HMI::run() {
             {
                 menu_select++;  
             } 
-        updateParameters(menu_select, btn_state, increment[inc_select]);
+        updateParameters(menu_select, increment[inc_select]);
         lcd.setCursor(0, 1);
         lcd.print("          ");
         lcd.setCursor(0, 1);
@@ -103,14 +103,15 @@ int HMI::run() {
 
     /* Check if two button is both pressed, used to choose other mode,.. !? */ 
     if (btn_state == 0 && enc_btn_state == 0) {
-        return 1;
+        mode += 1;
+        if (mode > 2) {
+            mode = 0;
+        }
     }
-    else {
-        return 0;
-    }
+    return mode;
 }
 
-void HMI::updateParameters(int gtmenu, int gttang, float inc) 
+void HMI::updateParameters(int gtmenu, float inc) 
 {
     if (gtmenu != 0) {
         lcd.setCursor(gtmenu*4, 0);

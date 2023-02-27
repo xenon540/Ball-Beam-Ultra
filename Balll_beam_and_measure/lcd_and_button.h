@@ -15,6 +15,6 @@ public:
     HMI();
     void HMIinit();
     int run();
-    void updateParameters(int gtmenu, int gttang, float inc);
+    void updateParameters(int gtmenu, float inc);
 };
 #endif

@@ -8,7 +8,7 @@
 Servo myServo;
 HMI myHMI;
 
-int both_click, flag;
+int both_click, operation_mode;
 float distance;
 int pid_period = 50;
 float elapsedTime, time, timePrev;        //Variables for time control
@@ -34,15 +34,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-    both_click = myHMI.run();
-    if (both_click == 1) {
-        flag = !(flag); //Toggle the flag 
-    }
-    if (flag == 1) {
-        // myServo.write(middle_angle???)
-        // measuring();
-    }
-
+    operation_mode = myHMI.run();
     distance = get_distance_cm();
     Serial.print(distance);
     myServo.write(servoAngle(distance));
