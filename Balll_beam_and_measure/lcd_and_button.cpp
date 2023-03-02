@@ -66,8 +66,8 @@ int HMI::run() {
         lcd.setCursor(0, 1);
         lcd.print(sys_var[menu_select]);
     } //* Only update if the ISR is called, make the program run less slowly
-    enc_btn_state = digitalRead(enc_pin_sw); 
-    if (enc_btn_state == 0 && enc_btn_state_prev == 1)
+    enc_btn_state = !digitalRead(enc_pin_sw); 
+    if (enc_btn_state == 1 && enc_btn_state_prev == 0)
     {
         if (inc_select >= 3)
             {
@@ -82,7 +82,7 @@ int HMI::run() {
     enc_btn_state_prev = enc_btn_state;
 
     btn_state = digitalRead(button_pin);
-    if (btn_state == 0 && btn_state_prev == 1)
+    if (btn_state == 1 && btn_state_prev == 0)
     {
         inc_select = 0;
         if (menu_select >= 3)
@@ -102,13 +102,16 @@ int HMI::run() {
     btn_state_prev = btn_state;
 
     /* Check if two button is both pressed, used to choose other mode,.. !? */ 
-    if (btn_state == 0 && enc_btn_state == 0) {
-        mode += 1;
-        if (mode > 2) {
-            mode = 0;
-        }
+    Serial.print(btn_state);
+    Serial.print("fuck");
+    Serial.println(enc_btn_state);
+    if (btn_state && enc_btn_state) {
+        return 1;
     }
-    return mode;
+    else {
+        return 0;
+    }
+
 }
 
 void HMI::updateParameters(int gtmenu, float inc) 

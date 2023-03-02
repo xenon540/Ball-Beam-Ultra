@@ -3,6 +3,9 @@
 
 void measuring() {
     while (1) {
+        if (digitalRead(MENU_BUTTON_PIN) && !digitalRead(ENCODER_PIN_SWITCH)) {
+            break;
+        }
         if (digitalRead(MENU_BUTTON_PIN)) {
             int count = 0;
             float val;
@@ -28,12 +31,10 @@ void measuring() {
                 }
             }
             nice_avg = nice_avg / (count - here_count);
+            // delay(1000);
             digitalWrite(LED_RED_PIN, LOW);
-            Serial.println(nice_avg);
-        }
-        if (digitalRead(MENU_BUTTON_PIN) == 0 && digitalRead(ENCODER_PIN_SWITCH) == 0) {
-            break;
+            Serial.println(nice_avg, 8);
         }
     }
-    
+    delay(1000);
 }

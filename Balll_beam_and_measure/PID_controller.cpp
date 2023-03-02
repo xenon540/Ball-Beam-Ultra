@@ -15,7 +15,7 @@ float servoAngle(float current_point) {
         PID_i = 0;
     }
     PID_total = PID_p + PID_i + PID_d;
-    PID_total = map(PID_total, -150, 150, 180, 0);
+    PID_total = map(PID_total, -150, 150, 130, 50);
     previous_distance_error = distance_error;
     return previous_distance_error;
 }
